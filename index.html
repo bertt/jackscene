@@ -31,14 +31,15 @@
 
       // Create Map
       var map = new Map({
-        basemap: "dark-gray",
-        ground: "world-elevation"
+        // basemap: "dark-gray",
+        // ground: "world-elevation"
       });
 
       // Create the SceneView
       var view = new SceneView({
         container: "viewDiv",
         map: map,
+	 spatialReference: 28992 
       });
 
       // Create SceneLayer and add to the map
