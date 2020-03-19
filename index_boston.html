@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.14/"></script>
+
+    <script>
+    var sceneserver = "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/ArcGIS/rest/services/Boston_current_buildings/SceneServer";
+	var measureWidget
+    require([
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+	  "esri/widgets/Legend",
+
+      "dojo/domReady!"
+    ], function(Map, SceneView, SceneLayer,Legend) {
+
+      // Create Map
+      var map = new Map({
+        basemap: "dark-gray",
+        ground: "world-elevation"
+      });
+
+      // Create the SceneView
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+      });
+
+      // Create SceneLayer and add to the map
+      var layer = new SceneLayer({
+          url: sceneserver + "/layers/0",
+        popupEnabled: true
+      });
+      map.add(layer);
+
+	  // Automatic zoom to layer extent
+	layer.when(function(){
+	  view.goTo(layer.fullExtent);
+	});
+
+	//legend
+        view.when(function() {
+          // when the resources in the MapView have loaded.
+          var legend = new Legend({
+            view: view,
+            layerInfos: [{
+              layer: layer,
+              title: sceneserver
+            }]
+          });
+
+          // Add widget to the bottom right corner of the view
+          view.ui.add(legend, "bottom-right");
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+</html>
